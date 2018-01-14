@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Session 4: Coefficient plots</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Data Visualization for Political Scientists</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="software.html">
+    <span class="fa fa-laptop"></span>
+     
+    Required Software and Installation Instructions
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Sessions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="session1.html">Session 1: Intro, R Refresher, and Code Organization</a>
+    </li>
+    <li>
+      <a href="session2.html">Session 2: ggplot2</a>
+    </li>
+    <li>
+      <a href="session3.html">Session 3: Facets and small multiples</a>
+    </li>
+    <li>
+      <a href="session4.html">Session 4: Coefficient Plots</a>
+    </li>
+    <li>
+      <a href="session5.html">Session 5: General Tips and Next Steps</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-list"></span>
+     
+    Data
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="help.html">
+    <span class="fa fa-question fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Session 4: Coefficient plots</h1>
+
+</div>
+
+
+<div id="slides" class="section level1">
+<h1>Slides</h1>
+<ul>
+<li><a href="./slides/session4_coefplots.html">HTML</a></li>
+<li><a href="./slides/session4.pdf">PDF</a></li>
+</ul>
+<hr />
+</div>
+<div id="coefficient-plots" class="section level1">
+<h1>Coefficient plots</h1>
+<p>Coefficient plots (“dot-and-whisker” plots) are a useful way to visualize regression models:</p>
+<ul>
+<li>No asterisks/superscripts necessary to display statistical significance</li>
+<li>Uncertainty better visualized through confidence intervals</li>
+<li>Effect size becomes more clear</li>
+</ul>
+Example from my own work:
+<div align="center">
+<p><img src="./images/coefplottable3.png" width = 80%></p>
+</div>
+<p>For more information, see <a href="http://www.princeton.edu/~jkastell/Tables2Graphs/graphs.pdf">Kastellec and Leoni 2007</a></p>
+<hr />
+</div>
+<div id="the-dotwhisker-package-basic-usage" class="section level1">
+<h1>The dotwhisker package: basic usage</h1>
+<p>In R, we use the <code>dotwhisker</code> package by Frederik Solt and Yue Hu to generate coefficient plots. The <code>dotwhisker</code> package builds on the <code>ggplot2</code> architecture, which makes it easy to use.</p>
+<p>Basic Usage:</p>
+<pre class="r"><code>library(tidyverse)
+library(dotwhisker)
+library(gapminder)
+
+# regress lifeExp on gdpPercap + population
+
+m1 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop), data = gapminder)
+
+dwplot(m1)</code></pre>
+<hr />
+</div>
+<div id="the-dotwhisker-package-basic-usage-1" class="section level1">
+<h1>The dotwhisker package: basic usage</h1>
+<p><img src="session4_files/figure-html/unnamed-chunk-3-1.png" width="1800" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="plot-multiple-models" class="section level1">
+<h1>Plot multiple models</h1>
+<pre class="r"><code>m1 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop), data = gapminder)
+
+# add predictors: continent fixed effects
+m2 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop) + continent, data = gapminder)
+
+dwplot(list(m1, m2))  </code></pre>
+<p><img src="session4_files/figure-html/unnamed-chunk-4-1.png" width="1800" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="tidy-models" class="section level1">
+<h1>tidy models</h1>
+<p>Instead of passing an <code>lm</code> model object, we can transform our model object(s) into tidy data frames, using the <code>broom</code> package. This has several advantages, including omitting coefficients from the output, that might not be needed in the final plot.</p>
+<pre class="r"><code>library(broom)
+
+# Estimate models
+m1 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop), data = gapminder)
+m2 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop) + continent, data = gapminder)
+
+# transform model objects into data frames
+m1_tidy &lt;- tidy(m1) # &#39;tidy()&#39; function is from the broom package
+m2_tidy &lt;- tidy(m2)
+
+m1_tidy</code></pre>
+<pre><code>##             term   estimate std.error statistic      p.value
+## 1    (Intercept) -28.771380 2.0756093 -13.86165 1.778729e-41
+## 2 log(gdpPercap)   8.344175 0.1434062  58.18558 0.000000e+00
+## 3       log(pop)   1.279164 0.1109215  11.53215 1.116612e-29</code></pre>
+<hr />
+</div>
+<div id="tidy-models-ii" class="section level1">
+<h1>tidy models II</h1>
+<pre class="r"><code>library(broom)
+
+# Estimate models
+m1 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop), data = gapminder)
+m2 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop) + continent, data = gapminder)
+
+# transform model objects into data frames
+m1_tidy &lt;- tidy(m1) 
+
+# add model name to tidy data frame
+m1_tidy &lt;- m1_tidy %&gt;% 
+  mutate(model = &quot;Baseline&quot;)
+
+# repeat for model 2
+m2_tidy &lt;- tidy(m2)
+m2_tidy &lt;- m2_tidy %&gt;% 
+  mutate(model = &quot;Continent FE&quot;)
+
+# &quot;glue&quot; model data frames together
+all_models &lt;- bind_rows(m1_tidy, m2_tidy)</code></pre>
+<hr />
+</div>
+<div id="tidy-models-ii-1" class="section level1">
+<h1>tidy models II</h1>
+<pre><code>##                 term    estimate std.error       p.value        model
+## 1        (Intercept) -28.7713800 2.0756093  1.778729e-41     Baseline
+## 2     log(gdpPercap)   8.3441753 0.1434062  0.000000e+00     Baseline
+## 3           log(pop)   1.2791640 0.1109215  1.116612e-29     Baseline
+## 4        (Intercept) -12.0146144 2.2658349  1.292082e-07 Continent FE
+## 5     log(gdpPercap)   6.5866883 0.1815170 6.767845e-214 Continent FE
+## 6           log(pop)   0.8658512 0.1105711  8.479925e-15 Continent FE
+## 7  continentAmericas   6.1684162 0.5554629  1.041386e-27 Continent FE
+## 8      continentAsia   4.6738187 0.4944597  1.058548e-20 Continent FE
+## 9    continentEurope   8.5618690 0.6075964  9.958829e-43 Continent FE
+## 10  continentOceania   8.3448995 1.5133508  4.044070e-08 Continent FE</code></pre>
+<hr />
+</div>
+<div id="tidy-models-iii" class="section level1">
+<h1>tidy models III</h1>
+<pre class="r"><code># keep only the coefficients with &quot;log&quot; in the name, i.e. the GDP and population 
+all_models &lt;- all_models %&gt;% 
+  filter(grepl(&quot;log&quot;, term))
+
+all_models</code></pre>
+<pre><code>##             term  estimate std.error statistic       p.value        model
+## 1 log(gdpPercap) 8.3441753 0.1434062 58.185578  0.000000e+00     Baseline
+## 2       log(pop) 1.2791640 0.1109215 11.532152  1.116612e-29     Baseline
+## 3 log(gdpPercap) 6.5866883 0.1815170 36.286895 6.767845e-214 Continent FE
+## 4       log(pop) 0.8658512 0.1105711  7.830722  8.479925e-15 Continent FE</code></pre>
+<hr />
+</div>
+<div id="tidy-models-iv" class="section level1">
+<h1>tidy models IV</h1>
+<p>Plot the resulting tidy data frame with <code>dwplot()</code></p>
+<pre class="r"><code>dwplot(all_models)</code></pre>
+<p><img src="session4_files/figure-html/unnamed-chunk-9-1.png" width="1800" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="manipulating-dwplot-output" class="section level1">
+<h1>Manipulating dwplot output</h1>
+<pre class="r"><code># relabel predictors, because we want nicer variable names
+all_models &lt;- all_models %&gt;% 
+  relabel_predictors(c(`log(gdpPercap)` = &quot;GDP/pc (log)&quot;, 
+                       `log(pop)` = &quot;Population (log)&quot;))
+
+# adjust colors + shapes
+coefplot_allmodels &lt;- dwplot(all_models, 
+                             # here are our regular aesthetics
+                             dot_args = list(aes(colour = model, 
+                                             shape = model)), 
+                             size = 3) + 
+  theme_bw() + 
+  labs(title = &quot;Predicting Life Expectancy&quot;, 
+       x = &quot;Coefficient Estimate with 95% CIs&quot;, 
+       y = &quot;&quot;) +
+  theme(plot.title = element_text(face=&quot;bold&quot;),
+        legend.position = &quot;bottom&quot;,
+        legend.background = element_rect(colour=&quot;grey80&quot;),
+        legend.title.align = .5) +
+  scale_shape_discrete(name  =&quot;Models&quot;, breaks = c(0, 1)) + # breaks assign shapes
+  scale_colour_grey(start = .3, end = .7, name = &quot;Models&quot;) # start/end for light/dark greys</code></pre>
+<hr />
+</div>
+<div id="manipulating-dwplot-output-1" class="section level1">
+<h1>Manipulating dwplot output</h1>
+<p><img src="session4_files/figure-html/unnamed-chunk-11-1.png" width="1800" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+<div id="exercise" class="section level1">
+<h1>Exercise</h1>
+<p>Add a third model to <code>all_models</code> that includes country fixed effects. (Hint: you can add country dummies in <code>R</code> by simply adding the name of a categorical variable into the <code>lm()</code> call).</p>
+<p>The baseline model stays</p>
+<p><code>lm(lifeExp ~ log(gdpPercap) + log(pop), data = gapminder)</code></p>
+<p>Plot the comparison of a the baseline model, the continent FE, and the country FE model.</p>
+<hr />
+</div>
+<div id="solution-i" class="section level1">
+<h1>Solution I</h1>
+<pre class="r"><code># Model Estimation and data preprocessing
+
+m1 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop), data = gapminder)
+m2 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop) + continent, data = gapminder)
+m3 &lt;- lm(lifeExp ~ log(gdpPercap) + log(pop) + country, data = gapminder)
+
+# tidy models
+m1_tidy &lt;- tidy(m1) %&gt;% 
+  mutate(model = &quot;Baseline&quot;)
+m2_tidy &lt;- tidy(m2) %&gt;% 
+  mutate(model = &quot;Continent FE&quot;)
+m3_tidy &lt;- tidy(m3) %&gt;% 
+  mutate(model = &quot;Country FE&quot;)
+
+# &#39;glue&#39; the models together
+
+all_models &lt;- bind_rows(m1_tidy, 
+                        m2_tidy, 
+                        m3_tidy) %&gt;% 
+  filter(grepl(&quot;log&quot;, term))</code></pre>
+<hr />
+</div>
+<div id="solution-ii" class="section level1">
+<h1>Solution II</h1>
+<pre class="r"><code># relabel predictors
+all_models &lt;- all_models %&gt;% 
+  relabel_predictors(c(`log(gdpPercap)` = &quot;GDP/pc (log)&quot;, 
+                       `log(pop)` = &quot;Population (log)&quot;))
+
+# adjust colors + shapes
+coefplot_allmodels &lt;- dwplot(all_models, 
+                             dot_args = list(aes(colour = model, 
+                                             shape = model)), 
+                             size = 3) + 
+  theme_bw() + 
+  labs(title = &quot;Predicting Life Expectancy&quot;, 
+       x = &quot;Coefficient Estimate with 95% CIs&quot;, y = &quot;&quot;) +
+  theme(plot.title = element_text(face=&quot;bold&quot;),
+        legend.position = &quot;bottom&quot;,
+        legend.title.align = .5) + 
+  scale_shape_discrete(name  =&quot;Models&quot;, breaks = c(0, 1)) + 
+  scale_colour_grey(start = .3, end = .7, name = &quot;Models&quot;) </code></pre>
+<hr />
+</div>
+<div id="solution-iii" class="section level1">
+<h1>Solution III</h1>
+<pre class="r"><code>print(coefplot_allmodels)   </code></pre>
+<p><img src="session4_files/figure-html/unnamed-chunk-14-1.png" width="1800" style="display: block; margin: auto;" /></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
