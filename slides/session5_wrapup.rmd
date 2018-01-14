@@ -17,7 +17,7 @@ output:
       highlightStyle: monokai
       highlightLines: true
     chakra: libs/remark-latest.min.js
-    
+encode: UTF-8  
 ---
 
 
@@ -94,7 +94,7 @@ Tip: include the term "stack" and "ggplot" in your google query terms
 [#rstats Twitter hashtag](https://twitter.com/hashtag/rstats)
 
 <div align = "center">
-<blockquote class="twitter-tweet" data-lang="de"><p lang="en" dir="ltr">My first <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> post of the year, powered by <a href="https://twitter.com/Thoughtfulnz?ref_src=twsrc%5Etfw">@Thoughtfulnz</a>&#39;s sorting hat! ???????<br><br>Are <a href="https://twitter.com/hashtag/python?src=hash&amp;ref_src=twsrc%5Etfw">#python</a> users more likely to get into Slytherin? ????<a href="https://t.co/zvCQst6V4f">https://t.co/zvCQst6V4f</a> <a href="https://t.co/HpqJm7LC4o">pic.twitter.com/HpqJm7LC4o</a></p>&mdash; Maëlle Salmon ???? (@ma_salmon) <a href="https://twitter.com/ma_salmon/status/948261667426717697?ref_src=twsrc%5Etfw">2. Januar 2018</a></blockquote>
+<blockquote class="twitter-tweet" data-lang="de"><p lang="en" dir="ltr">When you&#39;re using a new R package and everything you try results in the red error code of nope <a href="https://twitter.com/hashtag/Rstats?src=hash&amp;ref_src=twsrc%5Etfw">#Rstats</a> <a href="https://t.co/tcBMypctwi">pic.twitter.com/tcBMypctwi</a></p>&mdash; Daniel Swindlehurst (@SwindleApe) <a href="https://twitter.com/SwindleApe/status/938025492103524352?ref_src=twsrc%5Etfw">5. Dezember 2017</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
